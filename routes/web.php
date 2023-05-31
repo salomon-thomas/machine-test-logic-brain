@@ -21,10 +21,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/create-user', function (Request $request) {
-    dd("in");
-})->name('blogs.index');
+Route::group(['prefix' => '/users', 'middleware' => ['auth']], function () {
+    Route::get('/create', [App\Http\Controllers\UserController::class, 'create'])->name('create-user');
+    Route::post('/', [App\Http\Controllers\UserController::class, 'store'])->name('store-user');;
+});
 Route::group(['prefix' => '/blogs', 'middleware' => ['auth']], function () {
     Route::get('/', [App\Http\Controllers\BlogController::class, 'index'])->name('blogs.index');
     Route::get('/create', [App\Http\Controllers\BlogController::class, 'create'])->name('blogs.create');
@@ -35,3 +35,4 @@ Route::group(['prefix' => '/blogs', 'middleware' => ['auth']], function () {
     Route::delete('/{blog}', [App\Http\Controllers\BlogController::class, 'destroy'])->name('blogs.destroy');
     Route::post('/{blog}/comments', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
 });
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

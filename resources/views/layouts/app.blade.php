@@ -26,14 +26,12 @@
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 @auth
-                    <a class="navbar-brand" href="{{ url('/blogs') }}">
+                    <a class="nav-link mr-auto" href="{{ url('/blogs') }}">
                         Home
                     </a>
                     @if (auth()->check() &&
-                            auth()->user()->hasRole('admin'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('create-user') }}">Create User</a>
-                        </li>
+                            auth()->user()->role->name=='admin')
+                         <a class="nav-link mr-2" href="{{ route('create-user') }}">Create User</a>
                     @endif
                 @endauth
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
