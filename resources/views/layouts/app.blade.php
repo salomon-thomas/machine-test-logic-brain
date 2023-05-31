@@ -25,6 +25,17 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
+                @auth
+                    <a class="navbar-brand" href="{{ url('/blogs') }}">
+                        Home
+                    </a>
+                    @if (auth()->check() &&
+                            auth()->user()->hasRole('admin'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('create-user') }}">Create User</a>
+                        </li>
+                    @endif
+                @endauth
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">

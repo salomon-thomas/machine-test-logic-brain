@@ -26,7 +26,7 @@
             <form class="mt-2" method="POST" action="{{ route('comments.store', $blog) }}">
                 @csrf
                 <div class="form-group">
-                    <textarea name="content" id="content" class="form-control" rows="3" required></textarea>
+                    <textarea name="content" id="comment" class="form-control" rows="3" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary mt-2">Add Comment</button>
             </form>
