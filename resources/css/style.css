@@ -1,0 +1,92 @@
+/* Navbar */
+.navbar {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .navbar-brand,
+  .navbar-nav .nav-link {
+    color: #fff !important;
+  }
+  
+  /* Page Header */
+  .page-header {
+    margin: 40px 0;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .page-title {
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  /* Blog List */
+  .blog-list {
+    margin-bottom: 40px;
+  }
+  
+  .blog-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .blog-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .blog-author {
+    font-size: 14px;
+    color: #888;
+  }
+  
+  .blog-content {
+    margin-top: 10px;
+  }
+  
+  /* Blog Details */
+  .blog-details {
+    margin-bottom: 40px;
+  }
+  
+  .blog-details .blog-title {
+    font-size: 32px;
+  }
+  
+  .blog-details .blog-author {
+    font-size: 18px;
+    color: #888;
+  }
+  
+  .blog-details .blog-content {
+    margin-top: 20px;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+  
+  /* Blog Form */
+  .blog-form {
+    margin-bottom: 40px;
+  }
+  
+  .blog-form label {
+    font-weight: bold;
+  }
+  
+  .blog-form .form-control {
+    margin-bottom: 20px;
+  }
+  
+  /* Pagination */
+  .pagination {
+    margin-top: 20px;
+  }
+  
+  .pagination .page-item .page-link {
+    color: #333 !important;
+    background-color: #f8f8f8;
+   
+  }  
