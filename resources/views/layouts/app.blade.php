@@ -32,6 +32,7 @@
                     @if (auth()->check() &&
                             auth()->user()->role->name=='admin')
                          <a class="nav-link mr-2" href="{{ route('create-user') }}">Create User</a>
+                         <a class="nav-link mr-2" href="{{ route('import_form') }}">Import Posts</a>
                     @endif
                 @endauth
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"

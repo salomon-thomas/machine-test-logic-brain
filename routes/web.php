@@ -21,14 +21,16 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::group(['prefix' => '/users', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => '/users', 'middleware' => ['auth', 'role:admin']], function () {
     Route::get('/create', [App\Http\Controllers\UserController::class, 'create'])->name('create-user');
     Route::post('/', [App\Http\Controllers\UserController::class, 'store'])->name('store-user');;
 });
-Route::group(['prefix' => '/blogs', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => '/blogs', 'middleware' => ['auth', 'role:admin,editor']], function () {
     Route::get('/', [App\Http\Controllers\BlogController::class, 'index'])->name('blogs.index');
     Route::get('/create', [App\Http\Controllers\BlogController::class, 'create'])->name('blogs.create');
     Route::post('/', [App\Http\Controllers\BlogController::class, 'store'])->name('blogs.store');
+    Route::get('/import', [App\Http\Controllers\BlogController::class, 'showImportForm'])->name('import_form');
+    Route::post('/import', [App\Http\Controllers\BlogController::class, 'import'])->name('import_blogs');
     Route::get('/{blog}', [App\Http\Controllers\BlogController::class, 'show'])->name('blogs.show');
     Route::get('/{blog}/edit', [App\Http\Controllers\BlogController::class, 'edit'])->name('blogs.edit');
     Route::put('/{blog}', [App\Http\Controllers\BlogController::class, 'update'])->name('blogs.update');

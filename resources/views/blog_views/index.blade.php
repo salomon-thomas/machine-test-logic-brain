@@ -15,7 +15,9 @@
                     </li>
                 @endforeach
             </ul>
-            {{ $blogs->links() }}
+            <div class="d-flex justify-content-center mt-4 pagination">
+                {{ $blogs->links('pagination::bootstrap-4') }}
+            </div>
         @else
             <p>No blogs found.</p>
         @endif
