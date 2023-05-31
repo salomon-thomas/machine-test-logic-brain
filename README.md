@@ -1,5 +1,3 @@
-Sure! Here's a detailed documentation for the blog project:
-
 # Blog Project Documentation
 
 ## Table of Contents
