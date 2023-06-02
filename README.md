@@ -41,6 +41,7 @@ To set up the project, follow these steps:
    ```
 6. Start the development server:
    ```
+   npm run dev
    php artisan serve
    ```
 7. Access the project in a web browser using the provided URL.

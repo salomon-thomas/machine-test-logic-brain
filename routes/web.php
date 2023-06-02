@@ -1,8 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
+//controllers
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CommentController;
+use App\Http\Livewire\BlogImport;
+//livewire components
+use App\Http\Livewire\CreateUser;
+use App\Http\Livewire\BlogList;
+use App\Http\Livewire\CreateBlog;
+use App\Http\Livewire\Login;
+use App\Http\Livewire\Register;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,26 +24,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(['guest'])->group(function () {
+    Route::get('login', Login::class)->name('login');
+    Route::get('register', Register::class)->name('register');
 });
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Auth::routes();
+Route::get('/', BlogList::class)->name('blogs.index');
 
-Route::group(['prefix' => '/users', 'middleware' => ['auth', 'role:admin']], function () {
-    Route::get('/create', [App\Http\Controllers\UserController::class, 'create'])->name('create-user');
-    Route::post('/', [App\Http\Controllers\UserController::class, 'store'])->name('store-user');;
+Route::group(['middleware' => ['auth', 'role:admin']], function () {
+    Route::get('/users/create', CreateUser::class)->name('create-user');
 });
 Route::group(['prefix' => '/blogs', 'middleware' => ['auth', 'role:admin,editor']], function () {
-    Route::get('/', [App\Http\Controllers\BlogController::class, 'index'])->name('blogs.index');
-    Route::get('/create', [App\Http\Controllers\BlogController::class, 'create'])->name('blogs.create');
-    Route::post('/', [App\Http\Controllers\BlogController::class, 'store'])->name('blogs.store');
-    Route::get('/import', [App\Http\Controllers\BlogController::class, 'showImportForm'])->name('import_form');
-    Route::post('/import', [App\Http\Controllers\BlogController::class, 'import'])->name('import_blogs');
-    Route::get('/{blog}', [App\Http\Controllers\BlogController::class, 'show'])->name('blogs.show');
-    Route::get('/{blog}/edit', [App\Http\Controllers\BlogController::class, 'edit'])->name('blogs.edit');
-    Route::put('/{blog}', [App\Http\Controllers\BlogController::class, 'update'])->name('blogs.update');
-    Route::delete('/{blog}', [App\Http\Controllers\BlogController::class, 'destroy'])->name('blogs.destroy');
-    Route::post('/{blog}/comments', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
+    Route::get('/create', [BlogController::class, 'create'])->name('blogs.create');
+    Route::post('/store', [BlogController::class, 'store'])->name('blogs.store');
+    Route::get('/import',BlogImport::class)->name('import_form');
+    Route::get('/{blog}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
+    Route::put('/{blog}', [BlogController::class, 'update'])->name('blogs.update');
+    Route::delete('/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
 });
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group(['prefix' => '/blogs'], function () {
+    Route::get('/{blog}', [BlogController::class, 'show'])->name('blogs.show');
+});
