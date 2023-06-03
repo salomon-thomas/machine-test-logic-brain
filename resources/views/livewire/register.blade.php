@@ -1,91 +1,52 @@
+
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
-
-                <div class="card-body">
-                    @if (session()->has('message'))
-                        <div class="alert alert-success mb-4">
-                            {{ session('message') }}
-                        </div>
-                    @endif
-
-                    <form wire:submit.prevent="register">
-                        <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
-
-                            <div class="col-md-6">
-                                <input wire:model="name" id="name" type="text"
-                                    class="form-control @error('name') is-invalid @enderror" name="name"
-                                    value="{{ old('name') }}" required autofocus>
-
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="email"
-                                class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input wire:model="email" id="email" type="email"
-                                    class="form-control @error('email') is-invalid @enderror" name="email"
-                                    value="{{ old('email') }}" required>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password"
-                                class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input wire:model="password" id="password" type="password"
-                                    class="form-control @error('password') is-invalid @enderror" name="password"
-                                    required autocomplete="new-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password-confirm"
-                                class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input wire:model="password_confirmation" id="password-confirm" type="password"
-                                    class="form-control" name="password_confirmation" required
-                                    autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@push('scripts')
+    <main class="form-signin w-100 m-auto">
+        <form wire:submit.prevent="register">
     
-@endpush
+            <h1 class="h3 my-3 fw-normal text-center">Register</h1>
+    
+            <div class="form-floating my-2">
+                <input wire:model="name" type="text" class="form-control @error('name') is-invalid @enderror first"
+                    id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">Full Name</label>
+                @error('name')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+    
+            <div class="form-floating  my-2">
+                <input wire:model="email" type="email" class="form-control @error('email') is-invalid @enderror middle"
+                    id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">Email address</label>
+                @error('email')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+    
+            <div class="form-floating  my-2">
+                <input wire:model="password" type="password"
+                    class="form-control @error('password') is-invalid @enderror middle" id="floatingPassword"
+                    placeholder="Password">
+                <label for="floatingPassword">Password</label>
+                @error('password')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+    
+            <div class="form-floating  my-2">
+                <input wire:model="password_confirmation" type="password" class="form-control last" id="floatingPassword"
+                    placeholder="Password">
+                <label for="floatingPassword">Confirm Password</label>
+            </div>
+    
+            <button class="btn btn-primary btn-md d-block mx-auto my-3" type="submit">Sign Up</button>
+        </form>
+        <p class="mt-5 mb-3 text-body-secondary">&copy; 2023</p>
+    </main>
+</div>

@@ -10,21 +10,25 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     @livewireStyles
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/css/style.css'])
 
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', asset('css/styles.css')])
+
 </head>
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-white border-bottom">
             <div class="container">
-                <a class="navbar-brand" href="{{ route('blogs.index') }}">
-                    Home
-                </a>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('blogs.index') }}">
+                            Home
+                        </a>
+                    </li>
+                </ul>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -37,10 +41,12 @@
 
                         @if (auth()->check() && auth()->user()->role->name == 'admin')
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('create-user') }}">Create User</a>
+                                <a class="nav-link" href="{{ route('create-user') }}">Create
+                                    User</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('import_form') }}">Import Posts</a>
+                                <a class="nav-link" href="{{ route('import_form') }}">Import
+                                    Posts</a>
                             </li>
                         @endif
 
@@ -86,8 +92,7 @@
             </div>
         </nav>
 
-
-        <main class="py-4">
+        <main class="">
             @yield('content')
             @if (request()->routeIs('create-user'))
                 @livewire('create-user')
@@ -101,17 +106,16 @@
                 @livewire('register')
             @endif
 
-
         </main>
     </div>
     @livewireScripts
     @stack('scripts')
-    @if (request()->routeIs('blogs.create')||request()->routeIs('blogs.edit'))
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/trumbowyg@2.27.3/dist/trumbowyg.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trumbowyg@2.27.3/dist/ui/trumbowyg.min.css">
+    @if (request()->routeIs('blogs.create') || request()->routeIs('blogs.edit'))
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/trumbowyg@2.27.3/dist/trumbowyg.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trumbowyg@2.27.3/dist/ui/trumbowyg.min.css">
         <script>
-           $('#content').trumbowyg();
+            $('#content').trumbowyg();
         </script>
     @endif
 </body>

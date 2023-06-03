@@ -1,70 +1,34 @@
-<div class="container">
-    <div class="card">
-        <div class="card-header">{{ __('Login') }}</div>
+<div class="main form-signin w-100 m-auto">
+    <form wire:submit.prevent="login">
 
-        <div class="card-body">
-            <form wire:submit.prevent="login">
-                @csrf
+        <h1 class="h3 my-3 fw-normal text-center">Already A Member</h1>
 
-                <div class="row mb-3">
-                    <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                    <div class="col-md-6">
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                            wire:model="email" required autofocus>
-
-                        @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                    <div class="col-md-6">
-                        <input id="password" type="password"
-                            class="form-control @error('password') is-invalid @enderror" wire:model="password" required>
-
-                        @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6 offset-md-4">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" wire:model="remember" id="remember">
-
-                            <label class="form-check-label" for="remember">
-                                {{ __('Remember Me') }}
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-0">
-                    <div class="col-md-8 offset-md-4">
-                        <button type="submit" class="btn btn-primary">
-                            {{ __('Login') }}
-                        </button>
-
-                        @if (Route::has('password.request'))
-                            <a class="btn btn-link" href="{{ route('password.request') }}">
-                                {{ __('Forgot Your Password?') }}
-                            </a>
-                        @endif
-                    </div>
-                </div>
-            </form>
+        <div class="form-floating my-2">
+            <input type="email" class="form-control first" id="floatingInput" placeholder="name@example.com"
+                wire:model="email">
+            <label for="floatingInput">Email address</label>
         </div>
-    </div>
+        @error('email')
+            <span class="error">{{ $message }}</span>
+        @enderror
+
+        <div class="form-floating my-2">
+            <input type="password" class="form-control last" id="floatingPassword" placeholder="Password"
+                wire:model="password">
+            <label for="floatingPassword">Password</label>
+        </div>
+        @error('password')
+            <span class="error">{{ $message }}</span>
+        @enderror
+
+        <div class="form-check text-start my-3">
+            <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault"
+                wire:model="remember">
+            <label class="form-check-label" for="flexCheckDefault">
+                Remember me
+            </label>
+        </div>
+        <button class="btn btn-primary btn-md d-block mx-auto my-3" type="submit">Login In</button>
+        <p class="mt-5 mb-3 text-body-secondary">&copy; 2023</p>
+    </form>
 </div>
-@push('scripts')
-    
-@endpush

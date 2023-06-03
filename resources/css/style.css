@@ -1,12 +1,38 @@
 /* Navbar */
+body{
+  background: #ffffff;
+  font-family: 'Roboto', sans-serif;
+  color: #000000;
+}
+a,a:link{
+  text-decoration: none;
+}
+hr{
+  opacity: 1;
+    border-color: #dee2e6;
+}
+
+h1, h2, h3, h4,h5,h6{
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+}
+h3{
+  color: #000000;
+}
+h3 a, h3 a:link{
+  color: #000000;
+}.card{
+  background: #ffffff;    border-color: #dee2e6;
+}
 .navbar {
     background-color: #333;
-    color: #fff;
+    color: #000000;
   }
   
   .navbar-brand,
   .navbar-nav .nav-link {
-    color: #fff !important;
+    color: #000000 !important;
+    font-weight: 400;
   }
   
   /* Page Header */
@@ -85,8 +111,74 @@
     margin-top: 20px;
   }
   
-  .pagination .page-item .page-link {
-    color: #333 !important;
-    background-color: #f8f8f8;
-   
-  }  
+
+  .card-link .bi-chevron-right::before{
+    vertical-align: -0.25em
+  }
+
+  .form-signin {
+    max-width: 330px;
+    padding: 1rem;
+  }
+  
+  .form-signin .form-floating:focus-within {
+    z-index: 2;
+  }
+  .form-signin .middle {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+  }
+  
+  .form-signin .first {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  
+  .form-signin .last {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  
+  .form-control{
+    background-color:#ffffff;
+  }
+  .list-group{
+    background-color:#ffffff;
+  }
+  .list-group-item{
+    background-color:#ffffff;
+  }
+.list-text{
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+
+}
+.page-link{
+  background-color:#ffffff !important;
+  color: #000000 !important;
+}
+.page-link.active, .active > .page-link {
+
+  color: #000000 !important;
+  background-color:#ffffff !important;
+  border-color: #000000 !important;
+}
+  @media (min-width: 1200px) {   .btn{
+ min-width: 120px;
+  } 
+  .navbar-brand,
+  .navbar-nav .nav-link {
+    color: #000000 !important;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+}

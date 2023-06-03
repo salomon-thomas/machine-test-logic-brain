@@ -1,39 +1,65 @@
 <div class="container">
-    <div class="card">
-        <div class="card-header">
-            <h1 class="card-title text-center">Blogs</h1>
-        </div>
-        <div class="card-body">
-            @auth
-                <a href="{{ route('blogs.create') }}" class="btn btn-primary mb-3">Create Blog</a>
-                <hr>
-            @endauth
-            @if (count($blogs) > 0)
-                <ul class="list-group">
-                    @foreach ($blogs as $blog)
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <h3><a href="{{ route('blogs.show', $blog) }}">{{ $blog->title }}</a></h3>
-                                <small>Written by: {{ $blog->user->name }}</small>
-                            </div>
-                            @auth
-                                @if (auth()->user()->id == $blog->user_id)
-                                    <div>
-                                        <a href="{{ route('blogs.edit', $blog) }}" class="btn btn-sm btn-primary">Edit</a>
-                                        <button wire:click="delete({{ $blog->id }})" class="btn btn-sm btn-danger">Delete</button>
-                                    </div>
-                                @endif
-                            @endauth
-                        </li>
-                    @endforeach
-                </ul>
+    <h1 class="text-center mb-4 mt-4">Blogs</h1>
+    <hr>
+    @auth
+        <a href="{{ route('blogs.create') }}" class="btn btn-primary mb-3 float-end d-inline-block">Create
+            Blog</a>
+        <div class="clearfix"></div>
+    @endauth
+    @if (count($blogs) > 0)
+        <div class="row gx-3">
+            @foreach ($blogs as $blog)
+                <div class="col-md-6 col-12  mb-3">
+                    <div class="card">
 
-                <div class="d-flex justify-content-center mt-4">
-                    {{ $blogs->links('pagination::bootstrap-4') }}
+
+
+                        <div class="card-body">
+                            <h3 class="card-title"><a href="{{ route('blogs.show', $blog) }}">{{ $blog->title }}</a>
+                            </h3>
+                            <p class="card-text"><small class="text-body-secondary mb-3">Written
+                                    by:
+                                    {{ $blog->user->name }}</small></p>
+
+                            {{-- <p class="card-text list-text">{{ $blog->content }}</p> --}}
+                            <p class="card-text"><small class="text-body-secondary">Last
+                                    updated {{\Carbon\Carbon::parse($blog->updated_at)->diffForHumans()}}
+                                    </small></p>
+
+                            <div class="d-flex w-100 justify-content-between">
+                                <div class="align-self-center"> <a href="{{ route('blogs.show', $blog) }}"
+                                        class="card-link">Continue
+                                        Reading <i class="bi bi-chevron-right"></i></a></div>
+                                <div class="align-self-center">
+
+                                    @auth
+                                        @if (auth()->user()->id == $blog->user_id)
+                                            <div>
+                                                <a href="{{ route('blogs.edit', $blog) }}"
+                                                    class="btn btn-sm btn-primary">Edit</a>
+                                                <button wire:click="delete({{ $blog->id }})"
+                                                    class="btn btn-sm btn-danger">Delete</button>
+                                            </div>
+                                        @endif
+                                    @endauth
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
                 </div>
-            @else
-                <p class="text-center">No blogs found.</p>
-            @endif
+            @endforeach
         </div>
-    </div>
+
+
+
+        <div class="d-flex justify-content-center mt-4">
+            {{ $blogs->links('pagination::bootstrap-4') }}
+        </div>
+    @else
+        <p class="text-center">No blogs found.</p>
+    @endif
+
 </div>
