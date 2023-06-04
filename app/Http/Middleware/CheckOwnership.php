@@ -13,7 +13,7 @@ class CheckOwnership
         $blog = Blogs::find($blogId);
 
         if (!$blog || $blog->user_id !== auth()->id()) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'You have no authority over this post'], 403);
         }
         return $next($request);
     }

@@ -18,12 +18,13 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 Route::get('/blogs', [BlogController::class, 'index']);
 Route::get('/blogs/{id}', [BlogController::class, 'show']);
-Route::prefix('/blogs')->middleware(['auth:sanctum', 'role:admin'])->group(function () {//authenticated ROUTES
+Route::prefix('/blogs')->middleware(['auth:sanctum', 'role:admin,editor,user'])->group(function () {//authenticated ROUTES
     Route::post('/', [BlogController::class, 'store']);
     Route::middleware(['ownership'])->group(function () {//routes limited to blog owners
         Route::put('/{id}', [BlogController::class, 'update']);
-        Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
+        Route::delete('/{id}', [BlogController::class, 'destroy']);
     });
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Blogs;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
@@ -24,10 +25,10 @@ class BlogController extends Controller
             'title' => 'required',
             'content' => 'required',
         ]);
-
+        $request['user_id']=Auth::user()->id;
         $blog = Blogs::create($request->all());
 
-        return response()->json($blog, 201);
+        return response()->json(['message' => 'Blog created successfully.','data'=>$blog], 201);
     }
 
     public function show($id)
@@ -40,14 +41,13 @@ class BlogController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required',
-            'content' => 'required',
+            'title' => 'nullable',
+            'content' => 'nullable',
         ]);
-        dd($request->user());
         $blog = Blogs::findOrFail($id);
         $blog->update($request->all());
 
-        return response()->json($blog);
+        return response()->json(['message' => 'Blog updated successfully.',"data"=>$blog]);
     }
 
     public function destroy($id)

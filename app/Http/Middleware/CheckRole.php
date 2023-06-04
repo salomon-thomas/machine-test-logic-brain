@@ -7,20 +7,21 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckRole
 {
-    public function handle($request, Closure $next, $role)
+    public function handle($request, Closure $next, ...$roles)
     {
         // Check if user is authenticated
         if (Auth::check()) {
-            // Get the user's role
-            $userRole = Auth::user()->role->name;
+            // Get the user's roles
+            $userRoles = [Auth::user()->role->name];
 
-            // Check if user has the required role
-            if ($userRole === $role) {
+            // Check if user has any of the required roles
+            $allowed = array_intersect($userRoles, $roles);
+
+            // If user has at least one allowed role, continue to the next request
+            if (!empty($allowed)) {
                 return $next($request);
             }
         }
-
-        // Return JSON response for API requests
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }

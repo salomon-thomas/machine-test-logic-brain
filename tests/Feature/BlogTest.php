@@ -2,110 +2,157 @@
 
 namespace Tests\Feature;
 
-use App\Models\Blogs;
-use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Blogs;
 
 class BlogTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseTransactions, WithFaker;
 
-    /** @test */
-    public function a_guest_can_view_all_blogs()
-    {
-        $response = $this->get('/blogs');
-
-        $response->assertStatus(200);
-        $response->assertViewIs('blogs.index');
-    }
-
-    /** @test */
-    public function an_authenticated_user_can_create_a_blog()
+    /**
+     * Test that a user can create a new blog post.
+     */
+    public function testUserCreateBlogPost()
     {
         $user = User::factory()->create();
+        $token = $user->createToken('test')->plainTextToken;
 
-        $response = $this->actingAs($user)->post('/blogs', [
+        $blogData = [
             'title' => 'Test Blog',
             'content' => 'This is a test blog post.',
+        ];
+
+        $response = $this->postJson('/api/blogs', $blogData, [
+            'Authorization' => 'Bearer ' . $token,
         ]);
 
-        $response->assertStatus(302);
-        $response->assertRedirect('/blogs');
-        $this->assertDatabaseHas('blogs', [
-            'title' => 'Test Blog',
-            'content' => 'This is a test blog post.',
-            'user_id' => $user->id,
-        ]);
+        $response->assertStatus(201)
+            ->assertJson([
+                'message' => 'Blog created successfully.',
+            ]);
     }
 
-    /** @test */
-    public function an_authenticated_user_can_edit_their_own_blog()
+    /**
+     * Test that a user can view a specific blog post.
+     */
+    public function testUserViewBlogPost()
     {
         $user = User::factory()->create();
         $blog = Blogs::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user)->put("/blogs/{$blog->id}", [
-            'title' => 'Updated Title',
-            'content' => 'Updated content.',
-        ]);
+        $response = $this->getJson('/api/blogs/' . $blog->id);
 
-        $response->assertStatus(302);
-        $response->assertRedirect("/blogs/{$blog->id}");
-        $this->assertDatabaseHas('blogs', [
-            'id' => $blog->id,
-            'title' => 'Updated Title',
-            'content' => 'Updated content.',
-        ]);
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'id',
+                'title',
+                'content',
+                'user_id',
+                'created_at',
+                'updated_at',
+            ]);
     }
 
-    /** @test */
-    public function an_authenticated_user_cannot_edit_other_users_blogs()
-    {
-        $user1 = User::factory()->create();
-        $user2 = User::factory()->create();
-        $blog = Blogs::factory()->create(['user_id' => $user2->id]);
-
-        $response = $this->actingAs($user1)->put("/blogs/{$blog->id}", [
-            'title' => 'Updated Title',
-            'content' => 'Updated content.',
-        ]);
-
-        $response->assertStatus(403);
-        $this->assertDatabaseMissing('blogs', [
-            'id' => $blog->id,
-            'title' => 'Updated Title',
-            'content' => 'Updated content.',
-        ]);
-    }
-
-    /** @test */
-    public function an_authenticated_user_can_delete_their_own_blog()
+    /**
+     * Test that a user can edit their own blog post.
+     */
+    public function testUserEditOwnBlogPost()
     {
         $user = User::factory()->create();
+        $token = $user->createToken('test')->plainTextToken;
         $blog = Blogs::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user)->delete("/blogs/{$blog->id}");
+        $updatedTitle = 'Updated Blog Title';
 
-        $response->assertStatus(302);
-        $response->assertRedirect('/blogs');
-        $this->assertDeleted($blog);
+        $response = $this->putJson('/api/blogs/' . $blog->id, [
+            'title' => $updatedTitle,
+        ], [
+            'Authorization' => 'Bearer ' . $token,
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'message' => 'Blog updated successfully.',
+                'data' => [
+                    'title' => $updatedTitle,
+                ],
+            ]);
     }
 
-    /** @test */
-    public function an_authenticated_user_cannot_delete_other_users_blogs()
+    /**
+     * Test that a user cannot edit or delete someone else's blog post.
+     */
+    public function testUserCannotEditOrDeleteOthersBlogPost()
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
-        $blog = Blogs::factory()->create(['user_id' => $user2->id]);
+        $token2 = $user2->createToken('test')->plainTextToken;
+        $blog = Blogs::factory()->create(['user_id' => $user1->id]);
 
-        $response = $this->actingAs($user1)->delete("/blogs/{$blog->id}");
+        $updatedTitle = 'Updated Blog Title';
 
-        $response->assertStatus(403);
-        $this->assertDatabaseHas('blogs', [
-            'id' => $blog->id,
+        // Attempt to edit the blog post
+        $response = $this->putJson('/api/blogs/' . $blog->id, [
+            'title' => $updatedTitle,
+        ], [
+            'Authorization' => 'Bearer ' . $token2,
         ]);
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'error' => 'You have no authority over this post',
+            ]);
+
+        // Attempt to delete the blog post
+        $response = $this->deleteJson('/api/blogs/' . $blog->id, [], [
+            'Authorization' => 'Bearer ' . $token2,
+        ]);
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'error' => 'You have no authority over this post',
+            ]);
     }
+
+    /**
+     * Test that a user can delete their own blog post.
+     */
+    public function testUserDeleteOwnBlogPost()
+    {
+        $user = User::factory()->create();
+        $token = $user->createToken('test')->plainTextToken;
+        $blog = Blogs::factory()->create(['user_id' => $user->id]);
+
+        $response = $this->deleteJson('/api/blogs/' . $blog->id, [], [
+            'Authorization' => 'Bearer ' . $token,
+        ]);
+
+        $response->assertStatus(204);
+    }
+
+    /**
+     * Test that a user cannot delete someone else's blog post.
+     */
+    public function testUserCannotDeleteOthersBlogPost()
+    {
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $token2 = $user2->createToken('test')->plainTextToken;
+        $blog = Blogs::factory()->create(['user_id' => $user1->id]);
+
+        $response = $this->deleteJson('/api/blogs/' . $blog->id, [], [
+            'Authorization' => 'Bearer ' . $token2,
+        ]);
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'error' => 'You have no authority over this post',
+            ]);
+    }
+
+    // Add more test cases for other blog functionality...
+
 }

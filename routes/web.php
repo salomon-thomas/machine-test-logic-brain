@@ -4,12 +4,10 @@ use Illuminate\Support\Facades\Route;
 //controllers
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BlogController;
-use App\Http\Controllers\CommentController;
 use App\Http\Livewire\BlogImport;
 //livewire components
 use App\Http\Livewire\CreateUser;
 use App\Http\Livewire\BlogList;
-use App\Http\Livewire\CreateBlog;
 use App\Http\Livewire\Login;
 use App\Http\Livewire\Register;
 
@@ -35,7 +33,7 @@ Route::get('/', BlogList::class)->name('blogs.index');
 Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::get('/users/create', CreateUser::class)->name('create-user');
 });
-Route::group(['prefix' => '/blogs', 'middleware' => ['auth', 'role:admin,editor']], function () {
+Route::group(['prefix' => '/blogs', 'middleware' => ['auth', 'role:admin,editor,user']], function () {
     Route::get('/create', [BlogController::class, 'create'])->name('blogs.create');
     Route::post('/store', [BlogController::class, 'store'])->name('blogs.store');
     Route::get('/import',BlogImport::class)->name('import_form');
