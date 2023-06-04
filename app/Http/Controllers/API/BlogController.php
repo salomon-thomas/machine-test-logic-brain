@@ -3,17 +3,19 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Blog;
 use App\Models\Blogs;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = Blogs::all();
+        $skip = $request->query('skip', 0);
+        $limit = $request->query('limit', 10);
 
-        return response()->json($blogs);
+        $blogs = Blogs::skip($skip)->take($limit)->get();
+
+        return response()->json($blogs, 200);
     }
 
     public function store(Request $request)
@@ -41,7 +43,7 @@ class BlogController extends Controller
             'title' => 'required',
             'content' => 'required',
         ]);
-
+        dd($request->user());
         $blog = Blogs::findOrFail($id);
         $blog->update($request->all());
 
