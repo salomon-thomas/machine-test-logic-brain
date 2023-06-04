@@ -13,7 +13,7 @@
     <!-- Fonts & Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/css/style.css'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/style.css'])
 
 
 </head>
@@ -117,7 +117,7 @@
         <script>
             $('#content').trumbowyg();
         </script>
-    @endif
+    @endif  
 </body>
 
 </html>

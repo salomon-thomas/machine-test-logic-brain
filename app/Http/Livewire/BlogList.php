@@ -10,6 +10,8 @@ class BlogList extends Component
 {
     use WithPagination;
 
+    public $selectedBlog;
+
     public function render()
     {
         $blogs = Blogs::latest()->paginate(4);
@@ -17,13 +19,14 @@ class BlogList extends Component
         return view('livewire.blog-list', compact('blogs'));
     }
 
-    public function delete(Blogs $blog)
+    public function delete()
     {
-        if (auth()->user()->id == $blog->user_id) {
-            $blog->delete();
-            session()->flash('success', 'Blog deleted successfully.');
-        } else {
-            session()->flash('error', 'You are not authorized to delete this blog.');
-        }
+        $blog = Blogs::findOrFail($this->selectedBlog);
+
+        // Perform the delete action
+        $blog->delete();
+
+        // Redirect to a success page or perform additional actions as needed
+        session()->flash('success', 'Blog deleted successfully.');
     }
 }
